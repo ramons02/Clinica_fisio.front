@@ -1,0 +1,156 @@
+/* ===========================
+   CONFIGURAÇÕES - TELA
+=========================== */
+
+/* Container principal da tela */
+.config-container {
+  padding: 30px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  background: #f8f9fa;
+}
+
+/* Card de cadastro ou edição de usuário */
+.config-card {
+  background: white;
+  padding: 25px 30px;
+  border-radius: 12px;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+}
+
+.config-card h3 {
+  margin: 0 0 20px 0;
+  font-size: 1.2rem;
+  color: #3c4043;
+  font-weight: 600;
+}
+
+/* Formulários internos */
+.config-card .form-group {
+  margin-bottom: 18px;
+}
+
+.config-card .form-group label {
+  font-size: 0.75rem;
+  color: #5f6368;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  display: block;
+}
+
+.config-card .form-group input,
+.config-card .form-group select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #dadce0;
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+
+.config-card .form-group input:focus,
+.config-card .form-group select:focus {
+  border-color: #1a73e8;
+  outline: none;
+}
+
+/* Botões principais */
+.btn-config {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 8px;
+  background: #1a73e8;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-config:hover {
+  background: #1765cc;
+}
+
+/* Lista de usuários cadastrados */
+.user-list {
+  margin-top: 20px;
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+  overflow: hidden;
+}
+
+.user-list table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.user-list th,
+.user-list td {
+  padding: 12px 15px;
+  font-size: 0.9rem;
+  color: #3c4043;
+  text-align: left;
+  border-bottom: 1px solid #f1f3f4;
+}
+
+.user-list th {
+  background: #f1f3f4;
+  font-weight: 600;
+  color: #202124;
+}
+
+.user-list tr:hover {
+  background: #f8f9fa;
+}
+
+/* Botões de ação na lista */
+.user-list .btn-edit,
+.user-list .btn-delete {
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.user-list .btn-edit {
+  background: #34a853;
+  color: white;
+  margin-right: 6px;
+}
+
+.user-list .btn-edit:hover {
+  background: #2c8e46;
+}
+
+.user-list .btn-delete {
+  background: #d93025;
+  color: white;
+}
+
+.user-list .btn-delete:hover {
+  background: #b52a1f;
+}
+
+/* Mensagens de alerta ou feedback */
+.alert-config {
+  padding: 12px 15px;
+  border-radius: 8px;
+  margin-top: 10px;
+  font-size: 0.9rem;
+}
+
+.alert-success {
+  background: #e6f4ea;
+  color: #34a853;
+}
+
+.alert-error {
+  background: #fce8e6;
+  color: #d93025;
+}

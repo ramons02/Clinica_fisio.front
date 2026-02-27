@@ -1,0 +1,94 @@
+<div class="avaliacao-container">
+  <header>
+    <h1>Protocolo de Avaliação de Alta</h1>
+    <p>Critérios de Performance para Retorno ao Esporte (RTS)</p>
+  </header>
+
+  <div class="card" style="margin-bottom: 20px; border-left: 8px solid #1a73e8;">
+    <h3 style="color: #1a73e8; margin-bottom: 15px;">Identificação do Avaliado</h3>
+    <div class="input-group">
+      <label>Selecione o Paciente Ativo</label>
+      <select [(ngModel)]="dados.pacienteId"
+              style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #dadce0; font-size: 16px; background: #f8f9fa; cursor: pointer;">
+        <option value="">-- Clique para buscar paciente --</option>
+        <option *ngFor="let p of listaPacientesAtivos" [value]="p.id">
+          {{ p.nome }} | Lesão: {{ p.condicao }}
+        </option>
+      </select>
+    </div>
+  </div>
+
+  <div class="grid-cards">
+    <div class="card">
+      <h3>Dinamometria (Força Peak Torque)</h3>
+      <div class="input-group">
+        <label>Extensora (Dir / Esq) kgf</label>
+        <div class="row">
+          <input type="number" [(ngModel)]="dados.extDir" placeholder="Dir">
+          <input type="number" [(ngModel)]="dados.extEsq" placeholder="Esq">
+        </div>
+      </div>
+      <div class="input-group" style="margin-top: 15px;">
+        <label>Flexora (Dir / Esq) kgf</label>
+        <div class="row">
+          <input type="number" [(ngModel)]="dados.flexDir" placeholder="Dir">
+          <input type="number" [(ngModel)]="dados.flexEsq" placeholder="Esq">
+        </div>
+      </div>
+      <div class="resultado-container">
+        <div class="resultado" [style.background-color]="getCorStatus(calcLSI(dados.extDir, dados.extEsq))">
+          <span>LSI Extensão</span>
+          <strong>{{ calcLSI(dados.extDir, dados.extEsq).toFixed(1) }}%</strong>
+        </div>
+        <div class="resultado" [style.background-color]="getCorStatus(calcLSI(dados.flexDir, dados.flexEsq))">
+          <span>LSI Flexão</span>
+          <strong>{{ calcLSI(dados.flexDir, dados.flexEsq).toFixed(1) }}%</strong>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Hop Tests (Distância Saltos)</h3>
+      <div class="input-group">
+        <label>Single Hop (Dir / Esq) cm</label>
+        <div class="row">
+          <input type="number" [(ngModel)]="dados.singleDir" placeholder="Dir">
+          <input type="number" [(ngModel)]="dados.singleEsq" placeholder="Esq">
+        </div>
+      </div>
+      <div class="input-group" style="margin-top: 15px;">
+        <label>Triple Hop (Dir / Esq) cm</label>
+        <div class="row">
+          <input type="number" [(ngModel)]="dados.tripleDir" placeholder="Dir">
+          <input type="number" [(ngModel)]="dados.tripleEsq" placeholder="Esq">
+        </div>
+      </div>
+      <div class="resultado-container">
+        <div class="resultado" [style.background-color]="getCorStatus(calcLSI(dados.singleDir, dados.singleEsq))">
+          <span>LSI Single</span>
+          <strong>{{ calcLSI(dados.singleDir, dados.singleEsq).toFixed(1) }}%</strong>
+        </div>
+        <div class="resultado" [style.background-color]="getCorStatus(calcLSI(dados.tripleDir, dados.tripleEsq))">
+          <span>LSI Triple</span>
+          <strong>{{ calcLSI(dados.tripleDir, dados.tripleEsq).toFixed(1) }}%</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card full-width">
+    <h3>Percepção Psicológica e Alta</h3>
+    <div class="row align-center">
+      <div style="flex: 1;">
+        <label>Escala de Medo do Movimento (0 a 10)</label>
+        <input type="range" min="0" max="10" [(ngModel)]="dados.medoMovimento" style="width: 100%;">
+        <p>Nível de insegurança: <strong>{{ dados.medoMovimento }}</strong></p>
+      </div>
+
+      <div style="display: flex; gap: 10px;">
+        <button class="btn-save" (click)="salvarAvaliacao()" style="background-color: #34a853;">GRAVAR NO BANCO</button>
+        <button class="btn-save" (click)="gerarRelatorio()" style="background-color: #1a73e8;">GERAR RELATÓRIO PDF</button>
+      </div>
+    </div>
+  </div>
+</div>

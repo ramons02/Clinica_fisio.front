@@ -1,0 +1,110 @@
+/* Cards de resumo financeiro */
+.card-financeiro {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+}
+
+.card-financeiro h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 1.1rem;
+  color: #1a73e8;
+}
+
+.card-financeiro p {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #202124;
+}
+
+/* Grid da página financeiro */
+.financeiro-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.financeiro-conteudo {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.03);
+  overflow-x: auto;
+}
+
+.financeiro-conteudo table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.financeiro-conteudo th, .financeiro-conteudo td {
+  padding: 12px 10px;
+  border-bottom: 1px solid #eee;
+  text-align: left;
+}
+
+.financeiro-conteudo th {
+  background-color: #f1f3f4;
+  color: #202124;
+  font-weight: 600;
+}
+
+.financeiro-conteudo td button {
+  background: #1a73e8;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.financeiro-conteudo td button:hover {
+  background: #1765cc;
+}
+
+/* Modal financeiro - já padrão do seu CSS */
+.modal-resumo {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background: rgba(0,0,0,0.7) !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  z-index: 99999 !important;
+}
+
+.card-resumo {
+  background: white !important;
+  width: 350px !important;
+  padding: 25px !important;
+  border-radius: 15px !important;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5) !important;
+  color: #333 !important;
+}
+
+.btn-fechar {
+  background: #f1f3f4;
+  color: #5f6368;
+  border: none;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.btn-fechar:hover {
+  background: #e8eaed;
+  color: #202124;
+}

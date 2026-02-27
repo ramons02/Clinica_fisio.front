@@ -1,0 +1,215 @@
+<main class="login-container" *ngIf="!logado">
+  <div class="login-card">
+    <div class="header">
+      <h1>Clínica Fisio</h1>
+      <p>Bem-vindo, Dr. Ramon!</p>
+    </div>
+
+    <form (ngSubmit)="fazerLogin()">
+      <div class="input-group">
+        <label>Usuário</label>
+        <input type="text" name="username" [(ngModel)]="loginData.username">
+      </div>
+      <div class="input-group">
+        <label>Senha</label>
+        <input type="password" name="senha" [(ngModel)]="loginData.senha">
+      </div>
+      <button type="submit" class="btn-login">Entrar no Sistema</button>
+    </form>
+  </div>
+</main>
+
+<div *ngIf="exibindoResumoAgenda" class="modal-overlay"
+     style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.7); display: flex; justify-content: center; align-items: center; z-index: 999999;">
+
+  <div class="modal-card"
+       style="background: white; padding: 30px; border-radius: 20px; width: 380px; box-shadow: 0 15px 40px rgba(0,0,0,0.3); border-top: 10px solid #1a73e8; position: relative;">
+
+    <button (click)="exibindoResumoAgenda = false"
+            style="position: absolute; top: 15px; right: 15px; cursor: pointer; background: #f1f3f4; border: none; font-size: 18px; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; color: #666;">
+      ✕
+    </button>
+
+    <div style="text-align: center; margin-bottom: 25px;">
+      <h2 style="margin: 10px 0 0 0; color: #1a73e8; font-size: 22px;">Ficha Rápida</h2>
+      <p style="color: #666; font-size: 14px; margin: 5px 0;">Detalhes do Agendamento</p>
+    </div>
+
+    <div style="font-size: 15px; color: #333; line-height: 1.8; background: #f8f9fa; padding: 20px; border-radius: 12px;">
+      <p style="margin: 0 0 8px 0;"><strong>Nome:</strong> {{ pacienteResumo?.nome || pacienteResumo?.title }}</p>
+      <p style="margin: 0 0 8px 0;"><strong>Lesão/Condição:</strong> {{ pacienteResumo?.condicao || pacienteResumo?.lesao }}</p>
+      <p style="margin: 0 0 8px 0;"><strong>Telefone:</strong> {{ pacienteResumo?.telefone || 'Não informado' }}</p>
+      <p style="margin: 0;"><strong>Horário:</strong> <span style="color: #1a73e8; font-weight: bold; font-size: 16px;">{{ pacienteResumo?.horario }}</span></p>
+    </div>
+
+    <button (click)="mudarTela('pacientes'); abrirFicha(pacienteResumo); exibindoResumoAgenda = false"
+            style="width: 100%; margin-top: 25px; background: #1a73e8; color: white; border: none; padding: 15px; border-radius: 12px; cursor: pointer; font-weight: bold; font-size: 14px; transition: 0.3s; box-shadow: 0 4px 10px rgba(26, 115, 232, 0.3);">
+      VER PRONTUÁRIO COMPLETO
+    </button>
+
+    <p (click)="exibindoResumoAgenda = false" style="text-align: center; color: #999; font-size: 12px; margin-top: 15px; cursor: pointer;">
+      Fechar janela
+    </p>
+  </div>
+</div>
+
+<main class="dashboard-container" *ngIf="logado">
+
+  <nav class="sidebar">
+    <h2>FisioPower</h2>
+    <ul>
+      <li *ngIf="usuarioLogado?.cargo === 'Administrador' || usuarioLogado?.cargo === 'Secretaria' || usuarioLogado?.cargo === 'MASTER'"
+          [class.active]="telaAtual === 'home'" (click)="mudarTela('home')">
+        Início / Avisos
+      </li>
+      <li [class.active]="telaAtual === 'agenda'" (click)="mudarTela('agenda')">Agenda</li>
+      <li *ngIf="usuarioLogado?.cargo === 'Administrador' || usuarioLogado?.cargo === 'MASTER'"
+          [class.active]="telaAtual === 'pacientes'" (click)="mudarTela('pacientes')">Pacientes</li>
+      <li [class.active]="telaAtual === 'avaliacao'" (click)="mudarTela('avaliacao')">Avaliação de Performance</li>
+      <li *ngIf="usuarioLogado?.cargo === 'Administrador' || usuarioLogado?.cargo === 'MASTER' || usuarioLogado?.cargo?.toUpperCase() === 'SECRETARIA'"
+          [class.active]="telaAtual === 'financeiro'" (click)="mudarTela('financeiro')">
+        Financeiro
+      </li>
+      <li *ngIf="usuarioLogado?.cargo === 'Administrador' || usuarioLogado?.cargo === 'MASTER'"
+          [class.active]="telaAtual === 'configuracoes'" (click)="mudarTela('configuracoes')">
+        Configurações
+      </li>
+      <li (click)="logout()" class="logout">Sair</li>
+    </ul>
+  </nav>
+
+  <section class="content">
+    <header class="content-header">
+      <h1 *ngIf="telaAtual === 'home'">Painel de Controle</h1>
+      <h1 *ngIf="telaAtual === 'agenda'">Agenda de Reabilitação</h1>
+      <h1 *ngIf="telaAtual === 'pacientes'">Gestão de Pacientes</h1>
+      <h1 *ngIf="telaAtual === 'avaliacao'">Avaliação de Performance (RTS)</h1>
+      <h1 *ngIf="telaAtual === 'financeiro'">Controle Financeiro</h1>
+      <p>Dr. Ramon | {{ dataHoje }}</p>
+    </header>
+
+    <div *ngIf="telaAtual === 'avaliacao'">
+      <app-avaliacao></app-avaliacao>
+    </div>
+
+    <div *ngIf="telaAtual === 'agenda'">
+      <app-agenda (aoClicarNoAgendamento)="abrirResumoAgenda($event)"></app-agenda>
+    </div>
+
+    <div *ngIf="telaAtual === 'pacientes'">
+  <app-pacientes (aoSairDaFicha)="mudarTela('home')"></app-pacientes>
+</div>
+
+    <div *ngIf="telaAtual === 'financeiro'">
+      <app-financeiro [listaPacientes]="listaPacientes"></app-financeiro>
+    </div>
+
+    <div *ngIf="telaAtual === 'configuracoes'">
+      <app-configuracoes
+        [telaAtual]="telaAtual"
+        [usuarioLogado]="usuarioLogado"
+        (mudarTela)="mudarTela($event)"
+        (salvarUsuario)="salvarNovoUsuario($event)"> 
+      </app-configuracoes>
+    </div>
+
+    <div class="p-40" *ngIf="telaAtual === 'home'">
+      <div class="secao-avisos" style="margin-bottom: 30px;">
+        <h2 style="color: #444; font-size: 18px; margin-bottom: 15px; display: flex; align-items: center;">
+          Alertas de Renovação Mensal (Ciclo 30 Dias)
+        </h2>
+
+        <div *ngFor="let p of listaPacientes">
+          <div *ngIf="verificarRenovacaoProxima(p.dataInicioPlano)"
+               style="background: #fff4e5; border-left: 8px solid #ffa000; padding: 20px; margin-bottom: 12px; border-radius: 12px; display: flex; align-items: center; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
+
+            <div style="background: #ffa000; color: white; width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; font-size: 20px; font-weight: bold;">
+              $
+            </div>
+
+            <div style="flex-grow: 1;">
+              <h4 style="margin: 0; color: #663c00; font-size: 16px; font-weight: bold; text-transform: uppercase;">
+                Renovação: {{ p.nome }}
+              </h4>
+              <p style="margin: 4px 0 0 0; color: #5c3d00; font-size: 14px;">
+                O plano vence em <strong>{{ diasParaVencer(p.dataInicioPlano) }} dias</strong>.
+                <span style="margin-left: 10px; opacity: 0.8;">(Iniciou em: {{ p.dataInicioPlano | date:'dd/MM/yyyy' }})</span>
+              </p>
+            </div>
+
+            <div style="display: flex; gap: 10px;">
+              <button (click)="alternarPagamento(p)"
+                      style="background: #27ae60; color: white; border: none; padding: 10px 15px; border-radius: 8px; cursor: pointer; font-weight: bold;">
+                Confirmar Pagamento
+              </button>
+              <button (click)="mudarTela('pacientes'); abrirFicha(p)"
+                      style="background: #1a73e8; color: white; border: none; padding: 10px 15px; border-radius: 8px; cursor: pointer; font-weight: bold;">
+                Ver Ficha
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dashboard-cards" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 30px;">
+        <div class="card" style="background: #fce8e6; border-bottom: 4px solid #d93025; padding: 20px; border-radius: 10px;">
+          <h4 style="color: #d93025; margin: 0;">Pendências Financeiras</h4>
+          <p style="font-size: 24px; font-weight: bold; margin: 10px 0 0 0;">{{ contarPendentes() }} Pacientes</p>
+        </div>
+        <div class="card" style="background: #fff4e5; border-bottom: 4px solid #ffa000; padding: 20px; border-radius: 10px;">
+          <h4 style="color: #ffa000; margin: 0;">Vencimentos Próximos</h4>
+          <p style="font-size: 24px; font-weight: bold; margin: 10px 0 0 0;">{{ contarVencimentosProximos() }} Alertas</p>
+        </div>
+        <div class="card" style="background: #e8f0fe; border-bottom: 4px solid #1a73e8; padding: 20px; border-radius: 10px;">
+          <h4 style="color: #1a73e8; margin: 0;">Total de Pacientes</h4>
+          <p style="font-size: 24px; font-weight: bold; margin: 10px 0 0 0;">{{ listaPacientes.length }} Ativos</p>
+        </div>
+      </div>
+
+      <div class="card-lista-geral" style="background: white; padding: 25px; border-radius: 12px; border: 1px solid #eee; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+        <h3 style="margin-bottom: 20px; color: #1a73e8;">Monitoramento de Pagamentos Mensais</h3>
+        <table style="width: 100%; border-collapse: collapse;">
+          <thead>
+          <tr style="background: #f8f9fa; border-bottom: 2px solid #eee;">
+            <th style="padding: 15px; text-align: left;">Paciente</th>
+            <th style="padding: 15px; text-align: left;">Tipo de Plano</th>
+            <th style="padding: 15px; text-align: left;">Início do Ciclo</th>
+            <th style="padding: 15px; text-align: left;">Status de Pagamento</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let p of listaPacientes" style="border-bottom: 1px solid #eee;">
+            <td style="padding: 15px;">
+              <strong>{{ p.nome }}</strong><br>
+              <small style="color: #666;">{{ p.condicao }}</small>
+            </td>
+            <td style="padding: 15px;">
+              <span [style.color]="p.plano === 'mensalPosOp' ? '#d93025' : '#1a73e8'" style="font-weight: bold;">
+                {{ p.plano === 'mensalPosOp' ? 'Pós-Operatório' : 'Pré-Operatório' }}
+              </span>
+            </td>
+            <td style="padding: 15px;">
+              <div style="font-weight: 500;">{{ p.dataInicioPlano | date:'dd/MM/yyyy' }}</div>
+              <div [style.color]="verificarRenovacaoProxima(p.dataInicioPlano) ? '#d93025' : '#666'" style="font-size: 11px; margin-top: 5px;">
+                <span *ngIf="verificarRenovacaoProxima(p.dataInicioPlano)"><strong>RENOVA EM:</strong></span>
+                <span *ngIf="!verificarRenovacaoProxima(p.dataInicioPlano)">Ciclo atual:</span>
+                <strong> {{ diasParaVencer(p.dataInicioPlano) }} dias restantes</strong>
+              </div>
+            </td>
+            <td style="padding: 15px;">
+              <button (click)="alternarPagamento(p)"
+                      [style.background]="(p.pagoEsteMes || p.pago_este_mes) ? '#e6f4ea' : '#fce8e6'"
+                      [style.color]="(p.pagoEsteMes || p.pago_este_mes) ? '#1e8e3e' : '#d93025'"
+                      style="border: none; padding: 10px 20px; border-radius: 20px; font-weight: bold; cursor: pointer; transition: 0.3s; width: 130px;">
+                {{ (p.pagoEsteMes || p.pago_este_mes) ? 'PAGO' : 'PENDENTE' }}
+              </button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</main>
+
+<router-outlet></router-outlet>

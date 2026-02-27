@@ -1,0 +1,114 @@
+/* 6. TELA DE AVALIAÇÃO (ESTILO REABILITAÇÃO) */
+.avaliacao-container {
+  padding: 30px 40px;
+  background-color: #f8f9fa;
+
+  header {
+    margin-bottom: 25px;
+    h1 { color: #1a73e8; font-size: 1.8rem; margin: 0; }
+    p { color: #70757a; margin: 5px 0 0; font-size: 1rem; }
+  }
+
+  .grid-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 25px;
+    margin-bottom: 25px;
+  }
+
+  .card {
+    background: white;
+    padding: 24px;
+    border-radius: 12px;
+    border: 1px solid #dadce0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+
+    h3 {
+      margin-top: 0;
+      margin-bottom: 20px;
+      font-size: 1.1rem;
+      color: #3c4043;
+      border-bottom: 2px solid #e8f0fe;
+      padding-bottom: 10px;
+    }
+
+    &.full-width {
+      grid-column: 1 / -1;
+    }
+  }
+
+  .input-group {
+    margin-bottom: 20px;
+
+    label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #5f6368;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .row {
+      display: flex;
+      gap: 10px; // Espaço menor entre os inputs
+      width: 100%;
+      box-sizing: border-box; // Garante que o padding não aumente o tamanho real
+
+      input {
+        width: 100%; // Faz eles dividirem o espaço do flex
+        max-width: 120px; // Limita o tamanho máximo para não ficar gigante
+        padding: 10px;
+        border: 1px solid #dadce0;
+        border-radius: 8px;
+        font-size: 0.95rem;
+        box-sizing: border-box; // Fundamental para não vazar do card
+
+        &:focus {
+          border-color: #1a73e8;
+          outline: none;
+          box-shadow: 0 0 0 2px rgba(26,115,232,0.1);
+        }
+
+        &::placeholder {
+          color: #bdc1c6;
+          font-size: 0.8rem;
+        }
+      }
+    }
+  }
+
+  .resultado-container {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+  }
+
+  .resultado {
+    flex: 1;
+    padding: 15px;
+    border-radius: 8px;
+    color: white;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: all 0.3s ease;
+
+    span { font-size: 0.75rem; text-transform: uppercase; font-weight: 600; opacity: 0.9; }
+    strong { font-size: 1.4rem; margin-top: 4px; }
+  }
+
+  .btn-save {
+    background: #1a73e8;
+    color: white;
+    border: none;
+    padding: 16px 40px;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+    &:hover { background: #1765cc; box-shadow: 0 4px 12px rgba(26,115,232,0.3); }
+  }
+}

@@ -1,0 +1,87 @@
+<div class="p-40" *ngIf="telaAtual === 'agenda'" style="display: flex; gap: 20px;">
+
+  <aside class="agenda-sidebar" style="flex: 1; display: flex; flex-direction: column; gap: 20px;">
+    <div *ngIf="alertasVencimento.length > 0" style="background: #fff4e5; padding: 15px; border-radius: 12px; border-left: 5px solid #f4b400; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+      <h4 style="margin: 0 0 10px 0; color: #856404; font-size: 14px;"> Atenção: Renovação Necessária</h4>
+      <div *ngFor="let p of alertasVencimento" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 13px;">
+        <span><strong>{{ p.nome }}</strong> ({{ obterStatusMensalidade(p).texto }})</span>
+        <button (click)="renovarMes(p)" style="background: #f4b400; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: bold;">
+          Renovar
+        </button>
+      </div>
+    </div>
+
+    <div class="form-cadastro" style="background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); border-top: 5px solid #1a73e8;">
+      <h3 style="margin-top: 0; color: #1a73e8; display: flex; align-items: center; gap: 10px; font-size: 18px;">Agendar Sessão</h3>
+
+      <div class="form-group" style="margin-bottom: 20px;">
+        <label style="font-weight: 600; display: block; margin-bottom: 8px; color: #3c4043;">Paciente</label>
+        <select name="selectPaciente" [(ngModel)]="novoAgendamento.pacienteId" style="width: 100%; padding: 12px; border: 1px solid #dadce0; border-radius: 8px; background: #f8f9fa;">
+          <option value="">-- Selecionar Paciente --</option>
+          <option *ngFor="let p of listaPacientes" [value]="p.id">
+            {{ p.nome }} - {{ obterStatusMensalidade(p).texto }}
+          </option>
+        </select>
+      </div>
+
+      <div class="form-group" style="margin-bottom: 20px;">
+        <label style="font-weight: 600; display: block; margin-bottom: 8px; color: #3c4043;">Data da Sessão</label>
+        <input type="date" name="novaData" [(ngModel)]="novoAgendamento.data" style="width: 100%; padding: 10px; border: 1px solid #dadce0; border-radius: 8px; background: #f8f9fa;">
+      </div>
+
+      <div class="form-group" style="margin-bottom: 20px;">
+        <label style="font-weight: 600; display: block; margin-bottom: 8px; color: #3c4043;">Horário da Sessão</label>
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 12px;">
+          <button *ngFor="let h of ['08:00', '10:00', '14:00', '16:00', '18:00', '19:00']"
+                  (click)="novoAgendamento.horario = h"
+                  type="button"
+                  style="padding: 8px; border: 1px solid #e8f0fe; border-radius: 6px; background: #f1f3f4; color: #1a73e8; font-size: 12px; font-weight: bold; cursor: pointer;"
+                  [style.background]="novoAgendamento.horario === h ? '#1a73e8' : ''"
+                  [style.color]="novoAgendamento.horario === h ? 'white' : ''">
+            {{ h }}
+          </button>
+        </div>
+        <input type="time" name="novoHorario" [(ngModel)]="novoAgendamento.horario" style="width: 100%; padding: 10px; border: 1px solid #dadce0; border-radius: 8px;">
+      </div>
+
+      <button (click)="agendarSessao()" class="btn-add" style="width: 100%; padding: 15px; background: #1a73e8; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">Confirmar na Agenda</button>
+    </div>
+  </aside>
+
+  <article class="agenda-lista" style="flex: 2;">
+    <div class="card-agenda-google">
+      <div class="calendar-grid" style="display: flex; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+
+        <div class="time-column" style="width: 60px; background: #f8f9fa; border-right: 1px solid #eee;">
+          <div *ngFor="let h of ['08:00', '09:00', '10:00', '11:00', '12:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00']"
+               style="height: 60px; display: flex; align-items: center; justify-content: center; font-size: 11px; color: #70757a; border-bottom: 1px solid #f1f3f4;">
+            {{ h }}
+          </div>
+        </div>
+
+        <div class="events-column" style="flex: 1; position: relative;">
+          <div *ngFor="let h of ['08:00', '09:00', '10:00', '11:00', '12:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00']"
+               style="height: 60px; border-bottom: 1px solid #eee; display: flex; align-items: center; padding: 0 10px; gap: 5px; flex-wrap: wrap;">
+
+            <ng-container *ngFor="let a of agenda">
+              <div class="event-card-compacto"
+                   *ngIf="sessaoValida(a) && a.start.includes(h)"
+                   (click)="abrirResumoAgenda(a)"
+                   style="cursor: pointer; z-index: 10; background: #e8f0fe; padding: 8px; border-radius: 6px; width: 100%; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid #1a73e8; transition: 0.2s;">
+
+                <div class="event-info" style="flex: 1;">
+                  <strong style="color: #1a73e8; display: block; font-size: 13px;">{{ a.title }}</strong>
+                  <div style="display: flex; gap: 10px; align-items: center;">
+       <span class="lesao-badge" *ngIf="a.lesao" style="font-size: 11px; color: #5f6368; background: #fff; padding: 2px 6px; border-radius: 4px;">
+          {{ a.lesao }}
+       </span>
+                    <span style="font-size: 11px; color: #1a73e8; font-weight: bold;">{{ h }}</span>
+                  </div>
+                </div>
+
+                <button (click)="desmarcarSessao(a.id); $event.stopPropagation()"
+                        style="background: #fce8e6; border: none; color: #d93025; border-radius: 50%; width: 24px; height: 24px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold; margin-left: 5px;">
+                  ✕
+                </button>
+              </div>
+

@@ -1,0 +1,119 @@
+<div style="position: absolute; top: 0; left: 0; right: 0; padding: 20px 40px 40px 40px; background: white; min-height: 100vh; z-index: 5;" *ngIf="telaAtual === 'configuracoes' || telaAtual === 'config'">
+
+  <div style="max-width: 1200px; margin: 0 auto;" *ngIf="usuarioLogado && (usuarioLogado.cargo?.toUpperCase() === 'ADMINISTRADOR' || usuarioLogado.cargo?.toUpperCase() === 'MASTER')">
+
+    <div style="padding: 15px 0; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; margin-bottom: 20px;">
+      <div>
+        <h1 style="margin: 0; font-size: 1.4rem; color: #202124; font-weight: 700;">Painel de Controle</h1>
+        <p style="margin: 4px 0 0; font-size: 0.85rem; color: #70757a;">Gestão de equipe e valores financeiros da clínica</p>
+      </div>
+
+      <button (click)="voltarParaHome()" style="padding: 10px 20px; border-radius: 8px; border: 1px solid #dadce0; background: white; cursor: pointer; font-weight: 700; color: #1a73e8;">
+        Voltar para Página Inicial
+      </button>
+    </div>
+
+    <div style="background: white; border-radius: 12px; border: 1px solid #dadce0; box-shadow: 0 2px 12px rgba(0,0,0,0.08); margin-bottom: 30px; overflow: hidden;">
+
+      <div style="background: #f8f9fa; padding: 12px 25px; border-bottom: 1px solid #dadce0; display: flex; align-items: center; gap: 10px;">
+        <span style="font-size: 1.1rem;"></span>
+        <h2 style="margin: 0; font-size: 0.9rem; color: #1a73e8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Configurações Rápidas</h2>
+      </div>
+
+      <div style="padding: 25px; display: grid; grid-template-columns: 2fr 1px 1fr; gap: 30px; align-items: start;">
+
+        <div>
+          <h3 style="margin: 0 0 15px 0; font-size: 0.85rem; color: #5f6368; font-weight: 700;">CADASTRAR NOVO PROFISSIONAL</h3>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div class="form-group">
+              <label style="display: block; font-size: 11px; font-weight: 700; color: #202124; margin-bottom: 4px;">NOME COMPLETO</label>
+              <input type="text" [(ngModel)]="novoUsuario.nome" placeholder="Ex: Dra. Maria Silva" style="width: 100%; padding: 8px; border: 1px solid #dadce0; border-radius: 6px;">
+            </div>
+            <div class="form-group">
+              <label style="display: block; font-size: 11px; font-weight: 700; color: #202124; margin-bottom: 4px;">CARGO</label>
+              <select [(ngModel)]="novoUsuario.cargo" style="width: 100%; padding: 8px; border: 1px solid #dadce0; border-radius: 6px; background: white;">
+                <option value="FISIOTERAPEUTA">Fisioterapeuta</option>
+                <option value="SECRETARIA">Secretária</option>
+                <option value="ADMINISTRADOR">Administrador</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label style="display: block; font-size: 11px; font-weight: 700; color: #202124; margin-bottom: 4px;">LOGIN / USUÁRIO</label>
+              <input type="text" [(ngModel)]="novoUsuario.username" placeholder="usuario.fisio" style="width: 100%; padding: 8px; border: 1px solid #dadce0; border-radius: 6px;">
+            </div>
+            <div class="form-group">
+              <label style="display: block; font-size: 11px; font-weight: 700; color: #202124; margin-bottom: 4px;">SENHA</label>
+              <input type="password" [(ngModel)]="novoUsuario.senha" placeholder="****" style="width: 100%; padding: 8px; border: 1px solid #dadce0; border-radius: 6px;">
+            </div>
+          </div>
+          <button (click)="cadastrarUsuario()" style="margin-top: 15px; width: 100%; background: #1a73e8; color: white; border: none; padding: 12px; border-radius: 6px; font-weight: 700; cursor: pointer;">
+            + Adicionar Profissional à Equipe
+          </button>
+        </div>
+
+        <div style="background: #eee; height: 180px;"></div>
+
+        <div>
+          <h3 style="margin: 0 0 15px 0; font-size: 0.85rem; color: #5f6368; font-weight: 700;">VALORES DOS PLANOS (R$)</h3>
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; background: #f1f3f4; padding: 10px; border-radius: 8px;">
+              <span style="font-size: 11px; font-weight: 600;">MENSAL PRÉ-OP:</span>
+              <input type="number" [(ngModel)]="configFinanceira.mensalPreOp" style="width: 80px; padding: 5px; border: 1px solid #dadce0; border-radius: 4px; text-align: center;">
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; background: #f1f3f4; padding: 10px; border-radius: 8px;">
+              <span style="font-size: 11px; font-weight: 600;">MENSAL PÓS-OP:</span>
+              <input type="number" [(ngModel)]="configFinanceira.mensalPosOp" style="width: 80px; padding: 5px; border: 1px solid #dadce0; border-radius: 4px; text-align: center;">
+            </div>
+          </div>
+          <button (click)="salvarConfiguracoes()" style="margin-top: 15px; width: 100%; background: #34a853; color: white; border: none; padding: 12px; border-radius: 6px; font-weight: 700; cursor: pointer;">
+            Atualizar Preços
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <section style="background: white; border-radius: 12px; border: 1px solid #dadce0; box-shadow: 0 1px 3px rgba(0,0,0,0.1); overflow: hidden;">
+      <div style="padding: 12px 25px; background: white; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center;">
+        <span style="font-weight: 700; color: #5f6368; font-size: 0.8rem; text-transform: uppercase;">Profissionais Cadastrados</span>
+      </div>
+      <table style="width: 100%; border-collapse: collapse;">
+        <thead>
+        <tr style="text-align: left; background: #f8f9fa; border-bottom: 1px solid #eee;">
+          <th style="padding: 12px 25px; font-size: 11px; color: #5f6368;">NOME</th>
+          <th style="padding: 12px 25px; font-size: 11px; color: #5f6368;">USUÁRIO</th>
+          <th style="padding: 12px 25px; font-size: 11px; color: #5f6368;">CARGO</th>
+          <th style="padding: 12px 25px; font-size: 11px; color: #5f6368; text-align: center;">AÇÕES</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let u of listaUsuarios" style="border-bottom: 1px solid #f1f3f4;">
+          <td style="padding: 10px 25px; font-weight: 600; color: #202124; font-size: 13px;">{{ u.nome }}</td>
+          <td style="padding: 10px 25px; color: #70757a; font-family: monospace; font-size: 13px;">&#64;{{ u.username }}</td>
+          <td style="padding: 10px 25px;">
+              <span [style.background]="u.cargo?.toUpperCase() === 'ADMINISTRADOR' || u.cargo?.toUpperCase() === 'MASTER' ? '#feefc3' : '#e8f0fe'"
+                    [style.color]="u.cargo?.toUpperCase() === 'ADMINISTRADOR' || u.cargo?.toUpperCase() === 'MASTER' ? '#b06000' : '#1a73e8'"
+                    style="padding: 3px 8px; border-radius: 4px; font-size: 10px; font-weight: bold; text-transform: uppercase;">
+                {{ u.cargo }}
+              </span>
+          </td>
+          <td style="padding: 10px 25px; text-align: center;">
+            <button (click)="removerUsuario(u.id)" *ngIf="u.username !== 'ramon'"
+                    style="color: #d93025; background: none; border: none; cursor: pointer; font-weight: 600; font-size: 11px;">
+              Remover
+            </button>
+            <span *ngIf="u.username === 'ramon'" style="color: #34a853; font-size: 11px; font-weight: bold;">🛡️ MASTER</span>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </section>
+
+  </div>
+
+  <div style="text-align: center; padding-top: 100px;" *ngIf="usuarioLogado && usuarioLogado.cargo?.toUpperCase() !== 'ADMINISTRADOR' && usuarioLogado.cargo?.toUpperCase() !== 'MASTER'">
+    <h2>Acesso Restrito</h2>
+    <p>Apenas o administrador master pode alterar configurações financeiras e de equipe.</p>
+    <button (click)="telaAtual = 'home'">Voltar</button>
+  </div>
+
+</div>
